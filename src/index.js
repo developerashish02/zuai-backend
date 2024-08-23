@@ -1,7 +1,8 @@
 const app = require("./app");
+const { connectToDatabase } = require("./config/dbConfig.js");
 const config = require("./config/envConfig.js");
 
-console.log(config);
+connectToDatabase();
 
 app.listen(config.port, () => {
   console.log(
