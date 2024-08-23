@@ -10,17 +10,33 @@ const createPost = async (req, res) => {
 
     await newPost.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Post created successfully",
       post: newPost,
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res.status(400).json({ errors: error.errors });
+      return res.status(400).json({ errors: error.errors });
     } else {
-      res.status(500).json({ error: "Internal server error" });
+      return res.status(500).json({ error: "Internal server error" });
     }
   }
 };
 
-module.exports = { createPost };
+const getAllPosts = async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      message: "Posts retrieved successfully",
+      posts,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      details: error.message,
+    });
+  }
+};
+
+module.exports = { createPost, getAllPosts };
