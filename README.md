@@ -4,6 +4,8 @@
 
 This blog application includes both a list view and a detail view for blog posts. The application is built using modern technologies and follows best industry practices.
 
+## Video Demo 
+
 video : [https://www.loom.com/share/67d7843632954b0bae4765700777e1ce?sid=596aaabd-a8ee-48c1-8f1a-d6714b942068]
 
 ## Technologies Used
