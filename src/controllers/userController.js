@@ -4,26 +4,28 @@ const { userSchema } = require("../validations/postValidation");
 const User = require("../models/userModal");
 
 const createUser = async (req, res) => {
-  try {
-    const { username, password } = userSchema.parse(req.body);
+  const validation = userSchema.safeParse(req.body);
 
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return res.status(400).json({ message: "Username already taken" });
-    }
-
-    const newUser = new User({ username, password });
-    await newUser.save();
-
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-
-    return res.status(201).json({ token });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ errors: error.errors });
-    }
-    res.status(500).json({ message: "Server error" });
+  if (!validation.success) {
+    return res.status(400).json({
+      error: "Validation error",
+      details: validation.error.errors,
+    });
   }
+
+  const { username, password } = validation.data;
+
+  const existingUser = await User.findOne({ username });
+  if (existingUser) {
+    return res.status(400).json({ message: "Username already taken" });
+  }
+
+  const newUser = new User({ username, password });
+  await newUser.save();
+
+  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+
+  return res.status(201).json({ token });
 };
 
 const getAllUsers = async (req, res) => {
