@@ -20,3 +20,4 @@ router.put("/posts/:id", updatePost);
 router.delete("/posts/:id", deletePost);
 
 module.exports = router;
+  
