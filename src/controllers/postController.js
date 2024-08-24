@@ -98,4 +98,34 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { createPost, getAllPosts, updatePost, deletePost };
+const getSinglePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({
+        message: "Post not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Post retrieved successfully",
+      post,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: "Internal server error",
+      details: error.message,
+    });
+  }
+};
+
+module.exports = {
+  createPost,
+  getAllPosts,
+  updatePost,
+  deletePost,
+  getSinglePost,
+};
